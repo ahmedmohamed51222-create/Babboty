@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine? 💘</title>
+    <style>
+        /* ========== CUSTOMIZABLE VARIABLES ========== */
+        :root {
+            --gradient-1: #ff6b9d;
+            --gradient-2: #c44569;
+            --gradient-3: #9b59b6;
+            --gradient-4: #667eea;
+            --card-bg: rgba(255, 255, 255, 0.15);
+            --card-border: rgba(255, 255, 255, 0.3);
+            --text-color: #fff;
+            --yes-btn-color: #ff4757;
+            --no-btn-color: #747d8c;
+        }
+
+        /* ========== RESET & BASE STYLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2), var(--gradient-3), var(--gradient-4));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated gradient background */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating hearts background decoration */
+        body::before,
+        body::after {
+            content: '💗';
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.1;
+            animation: float 20s infinite;
+        }
+
+        body::before {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        body::after {
+            bottom: 10%;
+            right: 10%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+        }
+
+        /* ========== GLASSMORPHISM CARD ========== */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 2px solid var(--card-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            padding: 60px 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Card shimmer effect */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        /* ========== TYPOGRAPHY ========== */
+        .question {
+            color: var(--text-color);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 40px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Typewriter cursor */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.5rem;
+            background-color: var(--text-color);
+            margin-left: 5px;
+            animation: blink 0.7s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* ========== BUTTONS CONTAINER ========== */
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            position: relative;
+            min-height: 250px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        /* ========== YES BUTTON (Starts BIG) ========== */
+        .btn-yes {
+            background: var(--yes-btn-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 25px 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(255, 71, 87, 0.6);
+        }
+
+        .btn-yes:active {
+            transform: scale(1.05);
+        }
+
+        /* ========== NO BUTTON (Escapable) ========== */
+        .btn-no {
+            background: var(--no-btn-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 15px 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(116, 125, 140, 0.4);
+            transition: all 0.2s ease;
+            position: absolute;
+            z-index: 5;
+            text-transform: uppercase;
+        }
+
+        /* ========== TEASING TEXT ========== */
+        .tease-text {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== SUCCESS SCREEN ========== */
+        .success-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeIn 0.5s;
+        }
+
+        .success-screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .success-message {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 0 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.8s ease;
+            max-width: 90%;
+            margin-top: 20px;
+        }
+
+        .success-gif {
+            width: 300px;
+            max-width: 80%;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            animation: bounceIn 1s ease;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Canvas for confetti */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 600px) {
+            .card {
+                padding: 40px 20px;
+            }
+
+            .question {
+                font-size: 1.5rem;
+                min-height: 60px;
+            }
+
+            .buttons {
+                min-height: 280px;
+            }
+
+            .btn-yes {
+                font-size: 1.2rem;
+                padding: 20px 40px;
+            }
+
+            .btn-no {
+                font-size: 0.9rem;
+                padding: 12px 24px;
+            }
+
+            .success-message {
+                font-size: 1.8rem;
+            }
+
+            .success-gif {
+                width: 250px;
+            }
+
+            .tease-text {
+                font-size: 1rem;
+            }
+        }
+
+        /* Hide elements initially */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Card -->
+    <div class="card">
+        <div class="question" id="question"></div>
+        <div class="buttons" id="buttons-container">
+            <button class="btn-yes hidden" id="btn-yes">YES! 💗</button>
+            <button class="btn-no hidden" id="btn-no">No</button>
+        </div>
+        <div class="tease-text hidden" id="tease-text"></div>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="success-screen" id="success-screen">
+        <canvas id="confetti-canvas"></canvas>
+        <img src="" alt="Victory!" class="success-gif" id="success-gif">
+        <div class="success-message" id="success-message"></div>
+    </div>
+
+    <script>
+        // ========== CUSTOMIZABLE VARIABLES ==========
+        const CONFIG = {
+            partnerName: 'Babboty',
+            questionText: 'will you be my Valentine? 💘',
+            afterYesText: "That's my battoot 💗 Get yourself ready babes 😉",
+            // Victory GIF - you can replace this URL with any GIF you want
+            victoryGifUrl: 'https://media.giphy.com/media/g9582DNuQppxC/giphy.gif', // "I won!" celebration
+            typewriterSpeed: 100, // milliseconds per character
+            teaseMessages: [
+                "Nice try 😈",
+                "You can't escape me 😏",
+                "Just press YES already 😂",
+                "Stop running! 🏃‍♀️",
+                "The NO button is scared of commitment 😅",
+                "Why resist? 💕",
+                "YES is getting bigger... 👀"
+            ]
+        };
+
+        // ========== GLOBAL VARIABLES ==========
+        let escapeAttempts = 0;
+        let yesButtonScale = 1; // Track YES button growth
+
+        // ========== DOM ELEMENTS ==========
+        const questionEl = document.getElementById('question');
+        const btnYes = document.getElementById('btn-yes');
+        const btnNo = document.getElementById('btn-no');
+        const buttonsContainer = document.getElementById('buttons-container');
+        const teaseTextEl = document.getElementById('tease-text');
+        const successScreen = document.getElementById('success-screen');
+        const successMessage = document.getElementById('success-message');
+
+        // ========== TYPEWRITER EFFECT ==========
+        function typeWriter(text, element, speed, callback) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // Add cursor after typing is done
+                    element.innerHTML += '<span class="cursor"></span>';
+                    if (callback) callback();
+                }
+            }
+            
+            type();
+        }
+
+        // ========== INITIALIZE APP ==========
+        function init() {
+            console.log('App initializing...');
+            const fullText = `${CONFIG.partnerName}… ${CONFIG.questionText}`;
+            console.log('Text to type:', fullText);
+            
+            typeWriter(fullText, questionEl, CONFIG.typewriterSpeed, () => {
+                console.log('Typewriter finished, showing buttons');
+                // Show buttons after typewriter finishes
+                btnYes.classList.remove('hidden');
+                btnNo.classList.remove('hidden');
+                
+                // Position NO button initially
+                positionNoButton();
+            });
+        }
+
+        // ========== POSITION NO BUTTON RANDOMLY ==========
+        function positionNoButton() {
+            const container = buttonsContainer.getBoundingClientRect();
+            const button = btnNo.getBoundingClientRect();
+            
+            // Calculate safe boundaries within the container with padding
+            const padding = 10;
+            const maxX = container.width - button.width - (padding * 2);
+            const maxY = container.height - button.height - (padding * 2);
+            
+            // Ensure we have positive values
+            const safeMaxX = Math.max(0, maxX);
+            const safeMaxY = Math.max(0, maxY);
+            
+            const randomX = Math.random() * safeMaxX + padding;
+            const randomY = Math.random() * safeMaxY + padding;
+            
+            console.log('Positioning NO button:', {randomX, randomY, containerWidth: container.width, containerHeight: container.height});
+            
+            btnNo.style.left = `${randomX}px`;
+            btnNo.style.top = `${randomY}px`;
+        }
+
+        // ========== ESCAPE NO BUTTON ==========
+        function escapeNoButton() {
+            escapeAttempts++;
+            
+            // Move the NO button
+            positionNoButton();
+            
+            // Grow the YES button
+            yesButtonScale += 0.15;
+            btnYes.style.transform = `scale(${yesButtonScale})`;
+            
+            // Show teasing message every 2 attempts
+            if (escapeAttempts % 2 === 0) {
+                const randomMessage = CONFIG.teaseMessages[Math.floor(Math.random() * CONFIG.teaseMessages.length)];
+                teaseTextEl.textContent = randomMessage;
+                teaseTextEl.classList.remove('hidden');
+                
+                // Hide message after 2 seconds
+                setTimeout(() => {
+                    teaseTextEl.classList.add('hidden');
+                }, 2000);
+            }
+        }
+
+        // ========== HANDLE YES CLICK ==========
+        function handleYesClick() {
+            // Show success screen
+            const gifEl = document.getElementById('success-gif');
+            gifEl.src = CONFIG.victoryGifUrl;
+            successMessage.textContent = CONFIG.afterYesText;
+            successScreen.classList.add('active');
+            
+            // Start confetti
+            startConfetti();
+        }
+
+        // ========== CONFETTI ANIMATION ==========
+        function startConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const confettiPieces = [];
+            const confettiCount = 150;
+            const colors = ['#ff6b9d', '#c44569', '#9b59b6', '#667eea', '#feca57', '#48dbfb'];
+            
+            // Create confetti pieces
+            for (let i = 0; i < confettiCount; i++) {
+                confettiPieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * confettiCount,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.random() * 10 - 10,
+                    tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+                    tiltAngle: 0
+                });
+            }
+            
+            // Animation loop
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                confettiPieces.forEach((p, index) => {
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r / 2;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
+                    ctx.stroke();
+                    
+                    // Update position
+                    p.tiltAngle += p.tiltAngleIncremental;
+                    p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                    p.x += Math.sin(p.d);
+                    p.tilt = Math.sin(p.tiltAngle - index / 3) * 15;
+                    
+                    // Reset confetti if it goes off screen
+                    if (p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+                
+                requestAnimationFrame(draw);
+            }
+            
+            draw();
+        }
+
+        // ========== EVENT LISTENERS ==========
+        
+        // YES button click
+        btnYes.addEventListener('click', handleYesClick);
+        
+        // NO button hover (desktop) - make it run away
+        btnNo.addEventListener('mouseenter', escapeNoButton);
+        
+        // NO button touch (mobile) - make it run away
+        btnNo.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            escapeNoButton();
+        }, { passive: false });
+        
+        // Also handle touchend to catch any touch events
+        btnNo.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, { passive: false });
+        
+        // Prevent NO button from ever being clicked
+        btnNo.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            escapeNoButton();
+        });
+        
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('confetti-canvas');
+            if (canvas && successScreen.classList.contains('active')) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+        
+        // ========== START THE APP ==========
+        if (document.readyState === 'loading') {
+            window.addEventListener('DOMContentLoaded', init);
+        } else {
+            // DOM already loaded, run immediately
+            init();
+        }
+    </script>
+</body>
+</html>
